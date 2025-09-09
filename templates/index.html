@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastro de Candidatos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Formulário de cadastro -->
+        <div class="form-box">
+            <h2>Cadastrar Candidato</h2>
+            <form method="post" action="/cadastrar">
+                <input type="text" name="nome" placeholder="Nome" required>
+                <input type="text" name="cpf" placeholder="CPF">
+                <input type="date" name="data" placeholder="Data da Entrevista">
+                <select name="status">
+                    <option value="Aprovado">Aprovado</option>
+                    <option value="Reprovado">Reprovado</option>
+                    <option value="Em análise">Em análise</option>
+                </select>
+                <input type="submit" value="Cadastrar">
+            </form>
+        </div>
+
+        <!-- Lista de candidatos cadastrados -->
+        <div class="list-box">
+            <h2>Candidatos cadastrados:</h2>
+            {% if dados %}
+                {% for c in dados %}
+                <div class="candidato-card {% if c['Status']=='Aprovado' %}aprovado{% elif c['Status']=='Reprovado' %}reprovado{% else %}analise{% endif %}">
+                    <p><strong>Nome:</strong> {{ c["Nome"] }}</p>
+                    <p><strong>CPF:</strong> {{ c["CPF"] }}</p>
+                    <p><strong>Status:</strong> {{ c["Status"] }}</p>
+                    <p><strong>Data da Entrevista:</strong> {{ c["Data"] }}</p>
+                    <a class="excluir-btn" href="{{ url_for('excluir', index=loop.index0) }}">Excluir</a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>Nenhum candidato cadastrado ainda.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
